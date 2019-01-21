@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping List App</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<div id="shopping-list" class="container">
+    <ul>
+        <li v-for="item in items" :class="[item.purchased ? 'strike' : '', item.priority ? 'red' : '']" @click="toggleItem(item)">{{item.label}} </li>
+    </ul>
+    <div id="add-item-form">
+        <input type="text" v-model="newItem" placeholder="Enter item here">
+        <button v-if = "newItem.length > 3" @click="saveItem" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+        <button v-else = ""  class="btn btn-primary">Cancel</button>
+        <a v-bind:href="newItem"  target="_blank">{{characterCount}} / 10</a>
+    </div>
+
+</div>
+<body>
+<script src="vue.js"></script>
+<script>
+   let shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+            state: 'default',
+            header: "Vue Implementation",
+            newItem: '',
+            mistake: false,
+            items:[
+                {
+                    label: '10 party hats',
+                    purchased: false,
+                    priority: false
+                },
+                {
+                    label: '20 cups',
+                    purchased: false,
+                    priority: false
+
+                }
+            ],
+        },
+       computed: {
+            characterCount() {
+                return this.newItem.length;
+            }
+       },
+       methods: {
+            saveItem() {
+                this.items.push({
+                    label: this.newItem,
+                    purchased: false
+                });
+                this.newItem = '';
+            },
+            changeState(newState) {
+                this.state = newState;
+                this.newItem = '';
+            },
+           toggleItem(item) {
+                item.purchased = ! item.purchased;
+           }
+       }
+    });
+</script>
+</body>
+</html>
